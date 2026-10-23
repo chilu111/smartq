@@ -249,6 +249,11 @@ class QueueWorkflowTest extends TestCase
         $this->assertTrue($staff->departments()->whereKey($department->id)->exists());
         $this->assertTrue($staff->servicePoints()->whereKey($point->id)->exists());
         $this->assertSame('Radiology', $department->fresh()->name);
+        $this->put('/admin/staff/'.$staff->id, [
+            'name' => 'Updated Clinician', 'role_id' => $staffRole->id,
+            'department_ids' => [$department->id], 'service_point_ids' => [$point->id],
+        ])->assertSessionHasNoErrors();
+        $this->assertSame('Updated Clinician', $staff->fresh()->name);
         $this->put('/admin/departments/'.$department->id.'/targets', ['target_wait_minutes' => 20, 'target_service_minutes' => 15])->assertSessionHasNoErrors();
         $this->put('/admin/ticket-numbering', ['prefix' => 'Q'])->assertSessionHasNoErrors();
         $this->assertSame(20, $department->operationalTarget()->value('target_wait_minutes'));
