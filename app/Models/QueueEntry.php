@@ -15,7 +15,8 @@ class QueueEntry extends Model
         'visit_id', 'department_id', 'service_point_id', 'active_visit_key', 'service_point_active_key',
         'status', 'priority', 'priority_reason', 'priority_set_by', 'priority_set_at', 'queued_at',
         'first_called_at', 'last_called_at', 'service_started_at', 'service_completed_at',
-        'held_at', 'held_seconds', 'absent_at', 'completed_at', 'cancelled_at',
+        'service_pause_started_at', 'service_paused_seconds', 'held_at', 'held_seconds',
+        'waiting_paused_seconds', 'absent_at', 'completed_at', 'cancelled_at',
     ];
 
     protected function casts(): array
@@ -29,6 +30,9 @@ class QueueEntry extends Model
             'service_completed_at' => 'datetime',
             'service_pause_started_at' => 'datetime',
             'held_at' => 'datetime',
+            'held_seconds' => 'integer',
+            'service_paused_seconds' => 'integer',
+            'waiting_paused_seconds' => 'integer',
             'absent_at' => 'datetime',
             'completed_at' => 'datetime',
             'cancelled_at' => 'datetime',

@@ -193,6 +193,7 @@ class QueueService
             $entry->status = 'cancelled';
             $entry->cancelled_at = now();
             $entry->active_visit_key = null;
+            $entry->service_point_id = null;
             $entry->service_point_active_key = null;
         });
     }
@@ -246,6 +247,10 @@ class QueueService
                 'service_point_id' => $point?->id,
                 'active_visit_key' => 'visit:'.$entry->visit_id,
                 'status' => 'waiting',
+                'priority' => $entry->priority,
+                'priority_reason' => $entry->priority_reason,
+                'priority_set_by' => $entry->priority_set_by,
+                'priority_set_at' => $entry->priority_set_at,
                 'queued_at' => now(),
             ]);
             $this->event($target, $actor, 'department_transfer_in', null, 'waiting', ['source_department_id' => $entry->department_id]);

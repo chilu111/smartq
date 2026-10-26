@@ -131,8 +131,8 @@ class QueueController extends Controller
             'priority' => $entry->priority,
             'queued_at' => $entry->queued_at?->toIso8601String(),
             'waiting_minutes' => $entry->first_called_at
-                ? max(0, $entry->queued_at->diffInMinutes($entry->first_called_at) - (int) floor($entry->held_seconds / 60))
-                : max(0, $entry->queued_at->diffInMinutes(now()) - (int) floor($entry->held_seconds / 60)),
+                ? max(0, $entry->queued_at->diffInMinutes($entry->first_called_at) - (int) floor($entry->waiting_paused_seconds / 60))
+                : max(0, $entry->queued_at->diffInMinutes(now()) - (int) floor($entry->waiting_paused_seconds / 60)),
         ];
     }
 }
