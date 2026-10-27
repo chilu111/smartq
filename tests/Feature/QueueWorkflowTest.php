@@ -325,14 +325,16 @@ class QueueWorkflowTest extends TestCase
 
     public function test_dashboard_displays_database_analytics_for_selected_period(): void
     {
-        [$user, $department] = $this->staffWithDepartment();
+        [$user, $department, $point] = $this->staffWithDepartment();
         $managerRole = Role::create(['name' => 'Clinic Manager', 'slug' => 'clinic-manager']);
         $manager = User::factory()->create();
         $manager->roles()->attach($managerRole->id);
-        $this->createVisit($department, 'B990', now()->subMinutes(2));
+        $visit = $this->createVisit($department, 'B990', now()->subMinutes(2));
+        app(QueueService::class)->callNext($department, $point, $user);
 
         $this->actingAs($manager)->get('/dashboard?from='.today()->toDateString().'&to='.today()->toDateString())
-            ->assertOk()->assertSee('Queue overview')->assertSee('Reception')->assertSee('Visits created');
+            ->assertOk()->assertSee('Queue overview')->assertSee('Reception')->assertSee('Visits created')
+            ->assertSee($visit->ticket_number);
     }
 
     private function staffWithDepartment(string $roleSlug = 'receptionist', array $permissionSlugs = ['queue.call', 'queue.manage', 'queue.transfer', 'visits.register']): array

@@ -24,6 +24,11 @@ class QueueEvent extends Model
         return $this->belongsTo(Visit::class);
     }
 
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class);
+    }
+
     public function actor(): BelongsTo
     {
         return $this->belongsTo(User::class, 'actor_id');
